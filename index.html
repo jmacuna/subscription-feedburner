@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Suscripción de Correo Electrónico</title>
+		<link rel="stylesheet" href="style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+		<script>
+		idleTime = 0;
+		$(document).ready(function(){
+			$limit = 5; //seconds
+			if ($.cookie('test_status') != '1') {
+				function timerIncrement() {
+					idleTime = idleTime + 1;
+					if (idleTime > $limit) {
+						$('html, body').css('overflow', 'hidden');
+						$('.subs-popup ').fadeIn('slow');
+						idleTime = 0;
+					}
+				}
+				// Increment the idle time counter every second.
+				var idleInterval = setInterval(timerIncrement, 1000); // 1 second
+				// Zero the idle timer on mouse movement.
+				$(this).mousemove(function (e) {
+					idleTime = 0;
+				});
+				$(this).keypress(function (e) {
+					idleTime = 0;
+				});
+				$.cookie('test_status', '1', { expires: 30 });
+			}
+			$('.email-close').click(function() {
+				$('.subs-popup').fadeOut('slow');
+				$('html, body').css('overflow', 'auto');
+				$limit = 9999;
+			});
+		});
+		</script>
+    </head>
+<body class="body-popup">
+
+<div class="subs-popup">
+	<div id="newsletter">
+		<div class="email-close">X</div>
+		<div class="newsletter-wrap">
+			<h4>Suscríbete y recibe<br/>contenido exclusivo</h4>
+			<p>Las últimas novedades del blog<br/>directamente a tu email.<br/><br/></p>
+			<form action="http://feedburner.google.com/fb/a/mailverify?loc=es-ES&uri=feedjmacuna" method="post" onsubmit="$('.email-close').click();window.open('about:blank', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true" target="popupwindow" novalidate="">
+				<input name="uri" type="hidden" value="bloggertrix"/>
+				<input name="loc" type="hidden" value="en_ES"/>
+				<input type="email" value="" name="email" placeholder="Tu e-mail aqui..." required=""/><br/><br/>
+				<input type="submit" value="Suscribirme" class="button-popup">
+			</form>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
